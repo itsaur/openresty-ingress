@@ -1,0 +1,46 @@
+name: GitHub Continuous Integration
+
+on:
+
+  workflow_dispatch:
+
+    inputs:
+
+      NGINX_INGRESS_VERSION:
+        description: 'NGINX Ingress version to checkout'
+        required: true
+        default: '1.10.0'
+
+      OPENRESTY_VERSION:
+        description: 'OpenResty version to checkout'
+        required: true
+        default: '1.19.3.1-4'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v1
+        id: buildx
+        with:
+          install: true
+
+      - name: Run Makefile
+        env:
+          NGINX_INGRESS_VERSION: ${{ github.event.inputs.NGINX_INGRESS_VERSION }}
+          OPENRESTY_VERSION: ${{ github.event.inputs.OPENRESTY_VERSION }}
+        run: make all

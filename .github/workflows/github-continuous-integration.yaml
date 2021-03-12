@@ -33,12 +33,6 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Set up Docker BuildX
-        uses: docker/setup-buildx-action@v1
-        id: buildx
-        with:
-          install: true
-
       - name: Run Makefile
         env:
           NGINX_INGRESS_VERSION: ${{ github.event.inputs.NGINX_INGRESS_VERSION }}

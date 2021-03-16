@@ -26,10 +26,18 @@ build: changes
 	@make clean
 
 push: build
-	@echo "Pushing $(IMAGE):$(TAG)..."
-	@docker push $(IMAGE):$(TAG)
+	@echo "Tagging $(IMAGE):$(TAG) to $(IMAGE):latest..."
+	@docker tag $(IMAGE):$(TAG) $(IMAGE):latest
+	@echo "Tagging $(IMAGE):$(TAG) to $(IMAGE):$(TAG)-$(OPENRESTY_VERSION)..."
+	@docker tag $(IMAGE):$(TAG) $(IMAGE):$(TAG)-$(OPENRESTY_VERSION)
+	@echo "Pushing $(IMAGE)..."
+	@docker push --all-tags $(IMAGE)
 	@make remove
 
 remove:
+	@echo "Removing $(IMAGE):latest..."
+	@docker rmi $(IMAGE):latest
 	@echo "Removing $(IMAGE):$(TAG)..."
 	@docker rmi $(IMAGE):$(TAG)
+	@echo "Removing $(IMAGE):$(TAG)-$(OPENRESTY_VERSION)..."
+	@docker rmi $(IMAGE):$(TAG)-$(OPENRESTY_VERSION)

@@ -13,8 +13,10 @@ download: clean
 	@rm "v$(NGINX_INGRESS_VERSION).tar.gz"
 
 changes: download
-	@echo "Changing $(IMAGE):$(TAG)..."
+	@echo "Changing NGINX Ingress v$(NGINX_INGRESS_VERSION)..."
+	# Changing NGINX Docker image to our OpenResty Docker image.
 	@sed --in-place 's@FROM nginx:1.19.6 AS base@FROM itsaur/openresty:$(OPENRESTY_VERSION) AS base@g' "kubernetes-ingress-$(NGINX_INGRESS_VERSION)/build/Dockerfile"
+	# Removing unnecessary changes.
 	@sed --in-place '/libcap2-bin/d' "kubernetes-ingress-$(NGINX_INGRESS_VERSION)/build/Dockerfile"
 	@sed --in-place '/cap_net_bind_service=+ep/d' "kubernetes-ingress-$(NGINX_INGRESS_VERSION)/build/Dockerfile"
 

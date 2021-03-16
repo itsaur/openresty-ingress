@@ -15,11 +15,14 @@ download: clean
 	@rm "$(OPENRESTY_VERSION).tar.gz"
 
 changes: download
-	@echo "Changing $(IMAGE):$(TAG)..."
+	@echo "Changing OpenResty v$(OPENRESTY_VERSION)..."
+	# Naming OpenResty Docker image layer as openresty, in order to reference it later in our Dockerfile.
 	@sed --in-place 's/^FROM .*/& AS openresty/' "docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile"
+	# Changing OpenResty paths.
 	@sed --in-place 's@/usr/local/openresty/nginx/logs/@/var/log/nginx/@g' "docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile"
 	@sed --in-place 's@/usr/local/openresty/@/etc/nginx/@g' "docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile"
 	@sed --in-place 's@/etc/nginx/nginx/@/etc/nginx/@g' "docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile"
+	# Appending our Dockerfile.
 	@cat Dockerfile >>"docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile"
 
 build: changes

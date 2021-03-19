@@ -7,6 +7,7 @@ RUN set -o xtrace && \
     apt-get update && \
     apt-get upgrade --assume-yes && \
     apt-get dist-upgrade --assume-yes && \
+    chown 1000:0 /usr/sbin/nginx-vanilla && \
     apt-get install --assume-yes libcap2-bin && \
     setcap 'cap_net_bind_service=+ep' /usr/sbin/nginx-vanilla && \
     apt-get purge --assume-yes libcap2-bin && \
@@ -23,5 +24,4 @@ RUN set -o xtrace && \
     /var/cache/nginx/proxy_temp \
     /var/cache/nginx/scgi_temp \
     /var/cache/nginx/uwsgi_temp && \
-    ln --symbolic --force /etc/nginx/bin/openresty /usr/sbin/nginx && \
-    chown ${RESTY_USER}:0 /usr/sbin/nginx
+    ln --symbolic --force /etc/nginx/bin/openresty /usr/sbin/nginx

@@ -1,6 +1,6 @@
 all: build
 
 build:
-	@make --directory openresty/ build
-	@make --directory nginx-ingress/ push
-	@make --directory openresty/ remove
+	$(MAKE) --directory openresty/ build
+	$(MAKE) --directory nginx-ingress/ push
+	$(MAKE) --directory openresty/ remove

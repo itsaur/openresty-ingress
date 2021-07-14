@@ -1,9 +1,9 @@
 all: push
 
-IMAGE = itsaur/openresty
-PROCESSORS = $(shell grep --count processor /proc/cpuinfo)
-RESTY_CONFIG_OPTIONS = $(shell cat flags)
-TAG = $(OPENRESTY_VERSION)
+IMAGE := itsaur/openresty
+PROCESSORS := $(shell nproc)
+RESTY_CONFIG_OPTIONS := $(shell cat flags)
+TAG := $(OPENRESTY_VERSION)
 
 clean:
 	@rm --force --recursive "docker-openresty-$(OPENRESTY_VERSION)/"
@@ -34,12 +34,12 @@ build: changes
 	--file "docker-openresty-$(OPENRESTY_VERSION)/focal/Dockerfile" \
 	--tag $(IMAGE):$(TAG) \
 	"docker-openresty-$(OPENRESTY_VERSION)/"
-	@make clean
+	$(MAKE) clean
 
 push: build
 	@echo "Pushing $(IMAGE):$(TAG)..."
 	@docker push $(IMAGE):$(TAG)
-	@make remove
+	$(MAKE) remove
 
 remove:
 	@echo "Removing $(IMAGE):$(TAG)..."
